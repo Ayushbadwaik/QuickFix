@@ -1,0 +1,132 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Services — QuickFix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">QuickFix</a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="booking.html" class="cta">Book Now</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button id="menuBtn" class="menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="section-title">Our Services</h1>
+    <div class="search-row">
+      <input id="searchInput" placeholder="Search services, e.g., AC, plumbing..." class="input" />
+      <select id="categoryFilter" class="input">
+        <option value="">All categories</option>
+        <option>Home Cleaning</option>
+        <option>Plumbing</option>
+        <option>Electrical</option>
+        <option>AC Service</option>
+      </select>
+    </div>
+
+    <div id="servicesGrid" class="grid grid-3 services-grid"></div>
+
+    <div class="pagination" id="pagination"></div>
+  </main>
+
+  <footer class="site-footer small">
+    <div class="container footer-inner">
+      <p>© 2025 QuickFix</p>
+    </div>
+  </footer>
+
+  <template id="serviceCard">
+    <article class="service-card">
+      <div class="service-media"></div>
+      <div class="service-body">
+        <h3 class="service-title"></h3>
+        <p class="service-desc"></p>
+        <div class="service-meta">
+          <span class="price"></span>
+          <a class="btn btn-sm btn-primary book-btn" href="booking.html">Book</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="assets/main.js"></script>
+  <script>
+    // sample services data (could be loaded from JSON)
+    const SERVICES = [
+      {id:1, title:'Full Home Deep Clean', category:'Home Cleaning', price:1200, desc:'Complete 2BHK deep cleaning including kitchen and bathroom.'},
+      {id:2, title:'Sofa & Upholstery Cleaning', category:'Home Cleaning', price:400, desc:'Sofa cleaning with stain removal and deodorization.'},
+      {id:3, title:'Basic Plumbing Fix', category:'Plumbing', price:500, desc:'Fix taps, minor leaks, unclog drains.'},
+      {id:4, title:'AC Minor Service', category:'AC Service', price:1500, desc:'AC filter cleaning and minor servicing.'},
+      {id:5, title:'Electrical Repair', category:'Electrical', price:600, desc:'Switches, sockets, minor wiring repairs.'},
+      {id:6, title:'Geyser Repair', category:'Plumbing', price:800, desc:'Geyser maintenance and safety checks.'},
+      {id:7, title:'Window Cleaning', category:'Home Cleaning', price:300, desc:'External & internal window cleaning.'},
+      {id:8, title:'Inverter Repair', category:'Electrical', price:1200, desc:'Inverter diagnostics and minor repairs.'}
+    ];
+
+    const tpl = document.getElementById('serviceCard');
+    const grid = document.getElementById('servicesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const pagination = document.getElementById('pagination');
+    let page = 1, perPage = 6;
+
+    function renderServices(list){
+      grid.innerHTML = '';
+      const start = (page-1)*perPage;
+      const pageItems = list.slice(start, start+perPage);
+      for(const s of pageItems){
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.service-title').innerText = s.title;
+        node.querySelector('.service-desc').innerText = s.desc;
+        node.querySelector('.price').innerText = '₹ ' + s.price;
+        node.querySelector('.service-media').style.background = randomGradient(s.id);
+        node.querySelector('.book-btn').href = 'booking.html?service=' + encodeURIComponent(s.title) + '&price=' + s.price;
+        grid.appendChild(node);
+      }
+      renderPagination(list.length);
+    }
+
+    function renderPagination(total){
+      pagination.innerHTML = '';
+      const pages = Math.ceil(total / perPage);
+      for(let i=1;i<=pages;i++){
+        const b = document.createElement('button');
+        b.className = 'page-btn' + (i===page ? ' active' : '');
+        b.innerText = i;
+        b.onclick = ()=>{ page = i; applyFilters(); };
+        pagination.appendChild(b);
+      }
+    }
+
+    function applyFilters(){
+      const q = (searchInput.value||'').toLowerCase();
+      const cat = categoryFilter.value;
+      let filtered = SERVICES.filter(s => (s.title + s.desc).toLowerCase().includes(q) && (cat? s.category===cat : true));
+      renderServices(filtered);
+    }
+
+    function randomGradient(seed){
+      const colors = ['#6EE7B7','#60A5FA','#FDE68A','#FDBA74','#FBCFE8','#C7B3FF'];
+      return 'linear-gradient(135deg,' + colors[seed%colors.length] + ', rgba(255,255,255,0.08))';
+    }
+
+    searchInput.addEventListener('input', ()=>{ page=1; applyFilters(); });
+    categoryFilter.addEventListener('change', ()=>{ page=1; applyFilters(); });
+
+    // initial render
+    applyFilters();
+  </script>
+</body>
+</html>

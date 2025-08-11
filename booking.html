@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Book Service — QuickFix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ff7b00, #ffb347, #ffde59);
+      background-size: 300% 300%;
+      animation: bgMove 12s ease infinite;
+      color: #fff;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    /* Header */
+    .site-header {
+      background: rgba(0,0,0,0.4);
+      padding: 1rem 0;
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav a {
+      margin-left: 1rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav a.cta {
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background: #ff4e00;
+      transition: 0.3s;
+    }
+    .nav a.cta:hover {
+      background: #e64300;
+    }
+
+    /* Booking Layout */
+    .section-title {
+      font-size: 2rem;
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    .booking-grid {
+      display: grid;
+      gap: 2rem;
+      margin-top: 2rem;
+      grid-template-columns: 1fr 0.8fr;
+    }
+    .form-card {
+      background: rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      border-radius: 16px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-top: 0.4rem;
+      background: rgba(255,255,255,0.8);
+    }
+    input:focus {
+      background: #fff;
+      box-shadow: 0 0 0 2px #ff9d5c;
+    }
+
+    /* Buttons */
+    .form-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .btn-primary {
+      background: #ff4e00;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #e64300;
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    /* Bookings List */
+    .bookings-list {
+      background: rgba(0,0,0,0.25);
+      padding: 1rem;
+      border-radius: 16px;
+    }
+    .bookings-list h3 {
+      margin-top: 0;
+    }
+    .booking-item {
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+    .booking-actions {
+      margin-top: 0.5rem;
+    }
+    .muted {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: rgba(0,0,0,0.4);
+      padding: 1rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">QuickFix</a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="booking.html" class="cta">Book Now</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="section-title">Book a Service</h1>
+    <div class="booking-grid">
+      <form id="bookingForm" class="form-card">
+        <label>Service
+          <input id="serviceInput" name="service" required />
+        </label>
+        <label>Your name
+          <input id="name" name="name" required />
+        </label>
+        <label>Phone
+          <input id="phone" name="phone" required />
+        </label>
+        <label>Address
+          <input id="address" name="address" required />
+        </label>
+        <label>Date & Time
+          <input id="datetime" type="datetime-local" name="datetime" required />
+        </label>
+        <label>Approx. Price (₹)
+          <input id="price" name="price" required />
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Confirm Booking</button>
+          <button type="button" id="saveDraft" class="btn btn-ghost">Save Draft</button>
+        </div>
+        <p class="muted">Bookings are stored locally (localStorage) for demo purposes.</p>
+      </form>
+
+      <aside class="bookings-list">
+        <h3>Your bookings</h3>
+        <div id="bookings"></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer small">
+    <div class="container footer-inner">
+      <p>© 2025 QuickFix</p>
+    </div>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const preService = params.get('service') || '';
+    const prePrice = params.get('price') || '';
+    document.getElementById('serviceInput').value = preService;
+    document.getElementById('price').value = prePrice;
+
+    const form = document.getElementById('bookingForm');
+    const bookingsDiv = document.getElementById('bookings');
+
+    function loadBookings(){
+      const arr = JSON.parse(localStorage.getItem('qf_bookings')||'[]');
+      bookingsDiv.innerHTML = '';
+      if(arr.length===0) bookingsDiv.innerHTML = '<p class="muted">No bookings yet</p>';
+      arr.slice().reverse().forEach((b, i)=>{
+        const el = document.createElement('div');
+        el.className = 'booking-item';
+        el.innerHTML = `<strong>${b.service}</strong>
+          <div>${b.datetime}</div>
+          <div>${b.name} • ${b.phone}</div>
+          <div class="muted">${b.address}</div>
+          <div class="booking-actions">
+            <button data-i="${i}" class="btn btn-sm btn-ghost cancel">Cancel</button>
+          </div>`;
+        bookingsDiv.appendChild(el);
+      });
+      document.querySelectorAll('.cancel').forEach(btn=> btn.onclick = (e)=>{
+        const i = Number(e.target.dataset.i);
+        removeBooking(i);
+      });
+    }
+
+    function saveBooking(b){
+      const arr = JSON.parse(localStorage.getItem('qf_bookings')||'[]');
+      arr.push(b);
+      localStorage.setItem('qf_bookings', JSON.stringify(arr));
+      loadBookings();
+    }
+    function removeBooking(indexFromEnd){
+      const arr = JSON.parse(localStorage.getItem('qf_bookings')||'[]');
+      const keep = arr.slice(0, arr.length - 1 - indexFromEnd).concat(arr.slice(arr.length - indexFromEnd));
+      localStorage.setItem('qf_bookings', JSON.stringify(keep));
+      loadBookings();
+    }
+
+    form.onsubmit = (e)=>{
+      e.preventDefault();
+      const b = {
+        service: form.service.value,
+        name: form.name.value,
+        phone: form.phone.value,
+        address: form.address.value,
+        datetime: form.datetime.value,
+        price: form.price.value,
+        created: new Date().toISOString()
+      };
+      saveBooking(b);
+      alert('Booking saved locally — check "Your bookings" on this page.');
+      form.reset();
+      document.getElementById('serviceInput').value = preService;
+      document.getElementById('price').value = prePrice;
+    };
+
+    document.getElementById('saveDraft').onclick = ()=>{
+      const draft = {
+        service: form.service.value,
+        name: form.name.value,
+        phone: form.phone.value,
+        address: form.address.value,
+        datetime: form.datetime.value,
+        price: form.price.value,
+      };
+      localStorage.setItem('qf_draft', JSON.stringify(draft));
+      alert('Draft saved');
+    };
+
+    const draft = JSON.parse(localStorage.getItem('qf_draft')||'null');
+    if(draft){
+      form.service.value = draft.service || preService;
+      form.name.value = draft.name || '';
+      form.phone.value = draft.phone || '';
+      form.address.value = draft.address || '';
+      form.datetime.value = draft.datetime || '';
+      form.price.value = draft.price || prePrice;
+    }
+
+    loadBookings();
+  </script>
+</body>
+</html>
